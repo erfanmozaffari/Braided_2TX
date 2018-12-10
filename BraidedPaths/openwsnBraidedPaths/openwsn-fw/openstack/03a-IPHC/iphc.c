@@ -305,7 +305,11 @@ void iphc_receive(OpenQueueEntry_t* msg) {
                 rpi_length
             );
         }
-      
+        
+        /*printf("iphc: RX=> currAddr: %d, creator: %d, proto: %d, Src: %d, prevHop: %d, retriesLeft: %d, timeSlot: %d\n", 
+                  idmanager_getMyID(ADDR_64B)->addr_64b[7], msg->creator, ipv6_inner_header.next_header, 
+                  ipv6_inner_header.src.addr_64b[15], msg->l2_nextORpreviousHop.addr_64b[7], 
+                  msg->l2_retriesLeft, schedule_getSlotOffset());*/
         // send up the stack
         forwarding_receive(
             msg,

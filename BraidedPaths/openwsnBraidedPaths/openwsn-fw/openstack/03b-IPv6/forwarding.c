@@ -354,6 +354,10 @@ void forwarding_receive(
           // after change the creator to COMPONENT_FORWARDING,
           // there is no space for high priority packet, drop this message
           // by free the buffer.
+          /*printf("\nFW: discardPkt=> currAddr: %d, creator: %d, proto: %d, Src: %d, prevHop: %d, retriesLeft: %d, timeSlot: %d\n\n", 
+                  idmanager_getMyID(ADDR_64B)->addr_64b[7], msg->creator, msg->l4_protocol, 
+                  msg->l3_sourceAdd.addr_64b[15], msg->l2_nextORpreviousHop.addr_64b[7], 
+                  msg->l2_retriesLeft, schedule_getSlotOffset());*/
           openqueue_freePacketBuffer(msg);
           return;
         }

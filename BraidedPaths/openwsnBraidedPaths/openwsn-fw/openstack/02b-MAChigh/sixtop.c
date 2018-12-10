@@ -581,24 +581,37 @@ owerror_t sixtop_send_internal(
         ) {
         msg->l2_retriesLeft = 1;
     } else {
-        // if we have both parents and no failure, then we set chances=2, otherwise we set chances=1 (TXRETRIES=1)
+        /*// if we have both parents and no failure, then we set chances=4, otherwise we set chances=2 (TXRETRIES=3)
         open_addr_t checkAvailability;
         if (icmpv6rpl_getPreferredParentEui64(&checkAvailability)) {
             if (icmpv6rpl_getSecondPreferredParentEui64(&checkAvailability)) {
                 msg->l2_retriesLeft = TXRETRIES + 1;
             }
             else {
-                msg->l2_retriesLeft = TXRETRIES;
+                msg->l2_retriesLeft = TXRETRIES - 1;
             }
         }
-        // only secondary parent => single chance
+        // only secondary parent => two chances
         else {
-            msg->l2_retriesLeft = 1;
+            msg->l2_retriesLeft = TXRETRIES - 1;
         }
         // neighbor to the sink
         if (msg->l2_nextORpreviousHop.addr_64b[7] == msg->l3_destinationAdd.addr_128b[15]) {
             msg->l2_retriesLeft = TXRETRIES + 1;
+        }
+        /*if (msg->l4_protocol == IANA_UDP) {
+            printf("Sixtop=> currAddr: %d, creator: %d, proto: %d, Src: %d, nextHop: %d, retriesLeft: %d, timeSlot: %d\n", 
+                  idmanager_getMyID(ADDR_64B)->addr_64b[7], msg->creator, msg->l4_protocol, 
+                  msg->l3_sourceAdd.addr_64b[15], msg->l2_nextORpreviousHop.addr_64b[7], 
+                  msg->l2_retriesLeft, schedule_getSlotOffset());
         }        
+        */
+        if (msg->l4_protocol == IANA_UDP) {
+            msg->l2_retriesLeft = TXRETRIES + 1;
+        }
+        else {
+            msg->l2_retriesLeft = 2;
+        }
     }
     // record this packet's dsn (for matching the ACK)
     msg->l2_dsn = sixtop_vars.dsn++;

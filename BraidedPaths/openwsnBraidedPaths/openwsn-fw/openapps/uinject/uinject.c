@@ -92,12 +92,6 @@ void uinject_receive(OpenQueueEntry_t* pkt) {
 */
 void uinject_timer_cb(opentimers_id_t id){
 #ifdef QUEUE_MANAGEMENT
-    /*
-    uint8_t              asnArray[5];
-    ieee154e_getAsn(asnArray);
-    uint32_t currentASN = asnArray[0] + asnArray[1]*256 + asnArray[2]*256*256 + asnArray[3]*256*256*256;
-    printf("***********uinject_timer_cb activated on ASN %d in mote %d********\n", currentASN, idmanager_getMyID(ADDR_64B)->addr_64b[7]);
-    */
     // start periodic timer
     opentimers_scheduleIn(
         uinject_vars.timerId,
@@ -129,14 +123,13 @@ void uinject_task_cb() {
    if (currentASN%SLOTFRAME_LENGTH!=uinject_vars.period)
    	  return;
 
-   if (!openqueue_isQueueEmpty(IANA_UDP, COMPONENT_UINJECT)) {
+   if (!openqueue_makeQueueEmpty(IANA_UDP, COMPONENT_UINJECT)) {
       return;
    }
-
 #endif
 
    // if you get here, send a packet
-   printf("mote %d packet created on ASN %d\n", idmanager_getMyID(ADDR_64B)->addr_64b[7], currentASN);
+   printf("Mote %d packet created on ASN %d\n", idmanager_getMyID(ADDR_64B)->addr_64b[7], currentASN);
 
    // get a free packet buffer
    pkt = openqueue_getFreePacketBuffer(COMPONENT_UINJECT);

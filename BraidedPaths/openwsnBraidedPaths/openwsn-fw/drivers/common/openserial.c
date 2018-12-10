@@ -404,6 +404,12 @@ void openserial_statRx(OpenQueueEntry_t* msg){
    uint8_t asnArray[5];
    ieee154e_getAsn(asnArray);
    uint32_t currentASN = asnArray[0] + asnArray[1]*256 + asnArray[2]*256*256 + asnArray[3]*256*256*256;
+
+   /*printf("OpenSerial: RX=> currAddr: %d, creator: %d, proto: %d, Src: %d, prevHop: %d, retriesLeft: %d, timeSlot: %d, ASN: %d\n", 
+                  idmanager_getMyID(ADDR_64B)->addr_64b[7], msg->creator, msg->l4_protocol, 
+                  msg->l3_sourceAdd.addr_64b[15], msg->l2_nextORpreviousHop.addr_64b[7], 
+                  msg->l2_retriesLeft, schedule_getSlotOffset(), currentASN);*/
+
    FILE *getLogs = fopen("openwsnLogs.txt","a");
 
    if (getLogs != NULL) {
@@ -463,6 +469,11 @@ void openserial_statTx(OpenQueueEntry_t* msg){
     uint8_t asnArray[5];
     ieee154e_getAsn(asnArray);
     uint32_t currentASN = asnArray[0] + asnArray[1]*256 + asnArray[2]*256*256 + asnArray[3]*256*256*256;
+
+    /*printf("OpenSerial: TX=> currAddr: %d, creator: %d, proto: %d, Src: %d, nextHop: %d, retriesLeft: %d, timeSlot: %d, ASN: %d\n", 
+                  idmanager_getMyID(ADDR_64B)->addr_64b[7], msg->creator, msg->l4_protocol, 
+                  msg->l3_sourceAdd.addr_64b[15], msg->l2_nextORpreviousHop.addr_64b[7], 
+                  msg->l2_retriesLeft, schedule_getSlotOffset(), currentASN);*/
 
     FILE *getLogs = fopen("openwsnLogs.txt","a");
 
